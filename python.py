@@ -184,7 +184,7 @@ if uploaded_file is not None:
 else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
 st.markdown("---")
-st.subheader("Chat với Gemini AI 🤖")
+st.subheader("6. Chat với Gemini AI 🤖")
 
 # Lấy API key từ secrets (giữ nguyên cách lấy key)
 api_key = st.secrets.get("GEMINI_API_KEY")
