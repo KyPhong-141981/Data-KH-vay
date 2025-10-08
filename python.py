@@ -183,3 +183,35 @@ if uploaded_file is not None:
 
 else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
+st.markdown("---")
+st.subheader("Chat với Gemini AI 🤖")
+
+# Lấy API key từ secrets (giữ nguyên cách lấy key)
+api_key = st.secrets.get("GEMINI_API_KEY")
+
+if api_key is None:
+    st.error("Không tìm thấy Khóa API Gemini. Vui lòng cấu hình trong Streamlit Secrets.")
+else:
+    # Tạo input chat
+    user_input = st.text_input("Nhập câu hỏi của bạn cho Gemini:", key="chat_input")
+    
+    if st.button("Gửi câu hỏi"):
+        if not user_input.strip():
+            st.warning("Vui lòng nhập câu hỏi trước khi gửi.")
+        else:
+            with st.spinner("Đang gửi câu hỏi tới Gemini AI..."):
+                try:
+                    client = genai.Client(api_key=api_key)
+                    model_name = 'gemini-2.5-flash'
+                    
+                    # Tạo prompt để Gemini trả lời câu hỏi của người dùng
+                    prompt = f"Bạn là một trợ lý AI thông minh, trả lời câu hỏi sau một cách ngắn gọn và dễ hiểu:\n\n{user_input}"
+                    
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt
+                    )
+                    st.markdown("**Phản hồi từ Gemini AI:**")
+                    st.info(response.text)
+                except Exception as e:
+                    st.error(f"Có lỗi khi gọi API Gemini: {e}")
